@@ -1,0 +1,24 @@
+.image_slider::-webkit-scrollbar {
+    appearance: none;
+}
+
+body::-webkit-scrollbar {
+    appearance: none;
+    width: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #042a56;
+    border-radius: 3rem;
+}
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  .animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 30s linear infinite;
+  }
+  

@@ -1,0 +1,17 @@
+.light_gradient {
+    background: -webkit-linear-gradient(320deg, #104386, #10438680);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dark_gradient {
+    background: -webkit-linear-gradient(30deg, #FCFFF9F2, #FCFFF980);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.main_gradient {
+    background: -webkit-linear-gradient(320deg, #92CC7E 0%,#66A89F 19%,#1881B8 45%, #1675A7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
