@@ -12,6 +12,7 @@ const LandingPage = () => {
   const [sliderExpand, setSliderExpand] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeCard, setActiveCard] = useState(1);
 
   // Check for mobile viewport
   useEffect(() => {
@@ -37,6 +38,37 @@ const LandingPage = () => {
     
     return () => clearTimeout(timer);
   }, []);
+
+  ///////////
+  
+ 
+
+  // Check viewport size on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Function to navigate to next card on mobile
+  const nextCard = () => {
+    setActiveCard((prev) => (prev === 4 ? 1 : prev + 1));
+  };
+
+  // Function to navigate to previous card on mobile
+  const prevCard = () => {
+    setActiveCard((prev) => (prev === 1 ? 4 : prev - 1));
+  };
+
+
+
+
+
 
   // Loading animation component
   const LoadingAnimation = () => (
@@ -141,48 +173,75 @@ const LandingPage = () => {
         </section>
 
         {/* Looking Section */}
-        <section className="p-4 md:p-6 my-10 md:my-20">
-          <div className="text-3xl md:text-7xl text-center h-fit">
-            <h1 className="text-[#144486]">If you're looking at us,</h1>
-            <h1 className="light_gradient leading-normal -mt-1 md:-mt-2">You're looking to</h1>
+        <section className="p-4 sm:p-6 my-10 sm:my-16 md:my-20">
+      <div className="text-3xl sm:text-5xl md:text-7xl text-center h-fit">
+        <h1 className="text-[#144486]">If you're looking at us,</h1>
+        <h1 className="light_gradient leading-normal -mt-1 sm:-mt-2">You're looking to</h1>
+      </div>
+      
+      {/* Mobile view - carousel/slider */}
+      {isMobile && (
+        <div className="relative mt-8 min-h-[24rem]">
+          <div className="absolute inset-0 flex items-center justify-center">
+            {activeCard === 1 && <LookingCard url="looking1.png" c={1} head="GAIN" para="Gain Buyer's Trust" />}
+            {activeCard === 2 && <LookingCard url="looking2.png" c={2} head="ENHANCE" para="Enhance Sales Quota Attainment" />}
+            {activeCard === 3 && <LookingCard url="looking3.png" c={3} head="GENERATE" para="Generate Demand" />}
+            {activeCard === 4 && <LookingCard url="looking4.png" c={4} head="BUILD" para="Build A Distintive Brand" />}
           </div>
-
-          <div className="relative min-h-[20rem] md:min-h-[30rem] mt-8 md:mt-0">
-            {isMobile ? (
-              // Mobile layout: Cards in a scrollable container
-              <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
-                <div className="flex-shrink-0 w-64">
-                  <LookingCard url="looking1.png" c={1} head="GAIN" para="Gain Buyer's Trust" />
-                </div>
-                <div className="flex-shrink-0 w-64">
-                  <LookingCard url="looking2.png" c={2} head="ENHANCE" para="Enhance Sales Quota Attainment" />
-                </div>
-                <div className="flex-shrink-0 w-64">
-                  <LookingCard url="looking3.png" c={3} head="GENERATE" para="Generate Demand" />
-                </div>
-                <div className="flex-shrink-0 w-64">
-                  <LookingCard url="looking4.png" c={4} head="BUILD" para="Build A Distintive Brand" />
-                </div>
-              </div>
-            ) : (
-              // Desktop layout: Overlapping cards
-              <>
-                <div className="absolute left-20 -top-12 z-[8]">
-                  <LookingCard url="looking1.png" c={1} head="GAIN" para="Gain Buyer's Trust" />
-                </div>
-                <div className="absolute right-0 blur-[2px] scale-70 z-[6]">
-                  <LookingCard url="looking2.png" c={2} head="ENHANCE" para="Enhance Sales Quota Attainment" />
-                </div>
-                <div className="absolute right-60 -bottom-20 blur-[4px] scale-40 z-[4]">
-                  <LookingCard url="looking3.png" c={3} head="GENERATE" para="Generate Demand" />
-                </div>
-                <div className="absolute left-44 -bottom-32 scale-35 blur-[6px]">
-                  <LookingCard url="looking4.png" c={4} head="BUILD" para="Build A Distintive Brand" />
-                </div>
-              </>
-            )}
+          
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 pb-4">
+            {[1, 2, 3, 4].map((num) => (
+              <div 
+                key={num} 
+                className={`w-3 h-3 rounded-full cursor-pointer ${activeCard === num ? 'bg-[#144486]' : 'bg-gray-300'}`}
+                onClick={() => setActiveCard(num)}
+              />
+            ))}
           </div>
-        </section>
+          
+          <button 
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/30 p-2 rounded-full"
+            onClick={prevCard}
+            aria-label="Previous card"
+          >
+            <i className="ri-arrow-left-s-line text-2xl text-[#144486]"></i>
+          </button>
+          
+          <button 
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/30 p-2 rounded-full"
+            onClick={nextCard}
+            aria-label="Next card"
+          >
+            <i className="ri-arrow-right-s-line text-2xl text-[#144486]"></i>
+          </button>
+        </div>
+      )}
+      
+      {/* Desktop view - original layout */}
+      {!isMobile && (
+        <div className="relative min-h-[30rem]">
+          {/* Card 1 - Primary focus */}
+          <div className="absolute left-10 md:left-20 -top-12 z-[8]">
+            <LookingCard url="looking1.png" c={1} head="GAIN" para="Gain Buyer's Trust" />
+          </div>
+          
+          {/* Card 2 - Secondary */}
+          <div className="absolute right-0 blur-[1px] md:blur-[2px] scale-75 md:scale-70 z-[6]">
+            <LookingCard url="looking2.png" c={2} head="ENHANCE" para="Enhance Sales Quota Attainment" />
+          </div>
+          
+          {/* Card 3 - Further back */}
+          <div className="absolute right-40 md:right-60 -bottom-20 blur-[3px] md:blur-[4px] scale-50 md:scale-40 z-[4]">
+            <LookingCard url="looking3.png" c={3} head="GENERATE" para="Generate Demand" />
+          </div>
+          
+          {/* Card 4 - Most distant */}
+          <div className="absolute left-24 md:left-44 -bottom-32 scale-45 md:scale-35 blur-[5px] md:blur-[6px] z-[2]">
+            <LookingCard url="looking4.png" c={4} head="BUILD" para="Build A Distintive Brand" />
+          </div>
+        </div>
+      )}
+    </section>
 
         {/* Services Section */}
         <section className="overflow-hidden mb-8 md:mb-12">
